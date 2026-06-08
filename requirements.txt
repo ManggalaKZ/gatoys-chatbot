@@ -28,6 +28,12 @@ numpy==2.2.6
 scikit-learn==1.7.2
 
 # --- Database & Integrasi ---
+# Paket supabase + sub-paketnya WAJIB sama versi (2.22.0), kalau beda -> error supabase_auth
 supabase==2.22.0
+supabase-auth==2.22.0
+supabase-functions==2.22.0
+storage3==2.22.0
+postgrest==2.22.0
+realtime==2.22.0
 redis==6.4.0
 python-dotenv==1.1.1
