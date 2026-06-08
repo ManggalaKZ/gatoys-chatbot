@@ -1,0 +1,78 @@
+CHATBOT_SKRIPSI/
+│
+├── 📁 __pycache__/               # Python bytecode cache
+├── 📁 faiss_index/               # FAISS vector store files
+│   ├── index.faiss              # Vector embeddings
+│   └── index.pkl                # Document metadata
+│
+├── 📁 venv_fix/                  # Python virtual environment
+│
+├── 📁 core/                      # ← CORE BUSINESS LOGIC
+│   ├── __init__.py
+│   ├── __init__ copy.py         # Backup copy
+│   ├── chatbot.py               # 🎯 Main chatbot class (Pure RAG + Exact Matching)
+│   ├── llm_manager.py           # LLM initialization (Google Gemini)
+│   └── config.py                # Configuration & constants
+│
+├── 📁 embeddings/                # ← EMBEDDING MODELS
+│   ├── __init__.py
+│   ├── base.py                  # Base embedding interface
+│   ├── bge_m3.py                # BGE-M3 implementation (UNUSED)
+│   └── sentence_transformer.py  # 🎯 SentenceTransformer (ACTIVE)
+│
+├── 📁 data/                      # ← DATA MANAGEMENT & AUTO-REFRESH
+│   ├── __init__.py
+│   ├── loader.py                # Load products from Supabase
+│   ├── document_builder.py      # Build LangChain documents with FAQ-style
+│   ├── store_info.py            # Static store information
+│   ├── auto_refresh.py          # 🆕 Auto-refresh FAISS index (5-min polling)
+│   └── setup_auto_timestamp.sql # 🆕 SQL trigger untuk updated_at column
+│
+├── 📁 retrieval/                 # ← RAG RETRIEVAL SYSTEM
+│   ├── __init__.py
+│   ├── vector_store.py          # FAISS index builder & persistence
+│   ├── retriever.py             # RetrieverFactory for modular retrieval
+│   └── qa_chain.py              # RetrievalQA chain with custom prompt
+│
+├── 📁 query/                     # ← QUERY PROCESSING & VALIDATION
+│   ├── __init__.py
+│   ├── classifier.py            # Query type classification
+│   ├── confidence.py            # Confidence score calculation
+│   ├── validator.py             # Basic context validator (DEPRECATED)
+│   ├── enhanced_validator.py    # Enhanced validator (DEPRECATED)
+│   ├── semantic_validator.py    # Semantic validator (DEPRECATED)
+│   ├── ultra_validator.py       # 🎯 UltraValidator - 8-layer validation system
+│   └── exact_matcher.py         # 🆕 Exact match for SKU/brand + fuzzy matching
+│
+├── 📁 metrics/                   # ← METRICS & PERFORMANCE TRACKING
+│   ├── __init__.py
+│   ├── tracker.py               # MetricsTracker class (JSON persistence)
+│   └── exporter.py              # Export metrics untuk analisis skripsi
+│
+├── 📁 utils/                     # ← UTILITIES & HELPERS
+│   ├── __init__.py
+│   ├── helpers.py               # Helper functions (DB loader, doc builder)
+│   ├── exporter.py              # Data exporter
+│   └── testing.py               # Testing utilities
+│
+├── 📁 api/                       # ← API LAYER (FASTAPI)
+│   ├── __init__.py              # Singleton chatbot, Redis lock, semaphore
+│   ├── server.py                # 🎯 FastAPI app with lifespan (auto-refresh)
+│   └── models.py                # Pydantic request/response models
+│
+├── 📁 tests/                     # ← TESTING & VALIDATION
+│   └── __init__.py
+│
+├── 📁 backup/                    # ← OLD CODE BACKUPS
+│   └── ga_toys_chatbot.py.20251017_211619.bak
+│
+├── 📄 .env                       # 🔐 Environment variables (Supabase, Gemini API)
+├── 📄 main.py                    # Entry point (CLI mode)
+├── 📄 auto_create_data.py        # 🆕 Bulk data generator (500+ products)
+├── 📄 test_concurrent.py         # Concurrency testing script
+├── 📄 README.md                  # Project documentation
+│
+├── 📄 chatbot_metrics.json       # 📊 Generated metrics (auto-updated)
+└── 📄 result_response_data.json  # 📊 Q&A logs for analysis
+
+

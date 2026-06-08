@@ -1,0 +1,30 @@
+api/server.py
+┌─────────────────────────┐
+│  Postman / Laravel      │
+│  (HTTP Requests)        │
+└───────────┬─────────────┘
+            │ HTTP POST/GET
+            ▼
+    api/server.py (FastAPI)
+            │
+            ▼
+    ToysShopChatbot (Singleton)
+            │
+            ▼
+    Gemini + FAISS + RAG
+
+
+main.py
+┌─────────────────────────┐
+│     Terminal/Console    │
+│   (Interactive Chat)    │
+└───────────┬─────────────┘
+            │
+            ▼
+        main.py
+            │
+            ▼
+    ToysShopChatbot
+            │
+            ▼
+    Gemini + FAISS + RAG

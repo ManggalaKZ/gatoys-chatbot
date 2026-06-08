@@ -1,0 +1,50 @@
+USER QUESTION
+     │
+     ▼
+┌─────────────────────┐
+│  VALIDATION         │
+│  UltraValidator     │
+└──────┬──────────────┘
+       │ Valid
+       ▼
+┌─────────────────────┐
+│  EXACT MATCHER?     │
+│  (SKU/Brand)        │
+└──────┬──────────────┘
+       │
+   ┌───┴────┐
+   │        │
+ MATCH     NO
+   │        │
+   │        ▼
+   │   ┌─────────────────────┐
+   │   │ VECTOR SEARCH       │ ← Retrieval
+   │   │ (FAISS Similarity)  │
+   │   └─────────┬───────────┘
+   │             │
+   │             ▼
+   │   ┌─────────────────────┐
+   │   │ Top-K Documents     │ ← Retrieved Context
+   │   └─────────┬───────────┘
+   │             │
+   └─────────────┴──────────┐
+                            │
+                            ▼
+                   ┌─────────────────────┐
+                   │  RAG CHAIN INVOKE   │ ← Generation
+                   │  RetrievalQA        │
+                   └─────────┬───────────┘
+                             │
+                             ▼
+                   ┌─────────────────────┐
+                   │  LLM (Gemini)       │
+                   │  + Context          │
+                   │  + Prompt Template  │
+                   └─────────┬───────────┘
+                             │
+                             ▼
+                   ┌─────────────────────┐
+                   │  GENERATED ANSWER   │ ← Augmented Answer
+                   │  + Source Docs      │
+                   │  + Confidence       │
+                   └─────────────────────┘

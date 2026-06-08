@@ -1,0 +1,138 @@
+
+    
+"""
+DOKUMENTASI UNTUK SKRIPSI
+==========================
+
+1. ARSITEKTUR SISTEM
+   - Pure RAG approach (NO SQL queries)
+   - FAISS vector store untuk similarity search
+   - Sentence Transformers untuk embeddings
+   - Ollama Mistral sebagai LLM
+
+2. KOMPONEN UTAMA
+   a. Document Builder
+      - Load data produk dari database
+      - Transform ke natural language documents
+      - Include FAQ-style Q&A untuk better retrieval
+   
+   b. FAISS Index Builder
+      - Build vector embeddings
+      - Persistent storage untuk efficiency
+      - Auto-refresh mechanism
+   
+   c. RetrievalQA Chain
+      - Custom CS prompt
+      - Top-K retrieval (default: 4)
+      - Source tracking
+   
+   d. Metrics Tracker
+      - Query classification
+      - Confidence scoring
+      - Performance metrics
+      - Session tracking
+
+3. EVALUASI PERFORMA
+   - Success Rate: % queries dengan confidence >= 0.6
+   - Average Response Time: Waktu proses per query
+   - Average Confidence: Skor kepercayaan jawaban
+   - Query Type Distribution: Analisis jenis pertanyaan
+
+4. LIMITATIONS & TRADE-OFFS
+   - Data tidak real-time (snapshot saat indexing)
+   - Perlu periodic refresh untuk data terbaru
+   - Cocok untuk master data (produk, kebijakan)
+   - Tidak cocok untuk data transactional real-time
+
+5. IMPROVEMENTS UNTUK PRODUCTION
+   - Integrate dengan webhook untuk auto-refresh saat data berubah
+   - Add caching layer untuk frequently asked questions
+   - Implement A/B testing untuk prompt optimization
+   - Add user feedback collection
+   - Multi-language support
+
+6. RESEARCH QUESTIONS YANG BISA DIJAWAB
+   - Seberapa akurat RAG untuk CS chatbot?
+   - Bagaimana performa embedding model untuk Bahasa Indonesia?
+   - Apakah confidence score reliable?
+   - Query type mana yang paling sering muncul?
+   - Berapa optimal jumlah retrieved documents (k)?
+
+7. METRICS YANG BISA DIANALISIS
+   - Precision & Recall (manual evaluation needed)
+   - Response time distribution
+   - Confidence score distribution
+   - User satisfaction (perlu survey)
+   - Query success rate by type
+
+8. FILES GENERATED
+   - chatbot_metrics.json: Raw metrics data
+   - thesis_metrics_report.txt: Formatted report
+   - faiss_index/: Persistent vector store
+
+9. CARA RUNNING EXPERIMENTS
+   python rag_cs_chatbot.py test    # Run automated tests
+   python rag_cs_chatbot.py metrics # Generate report
+   
+10. CUSTOMIZATION POINTS
+    - RETRIEVAL_TOP_K: Adjust jumlah docs retrieved
+    - LLM_TEMPERATURE: Adjust creativity level
+    - REFRESH_INTERVAL_MINUTES: Adjust refresh frequency
+    - Custom prompts: Modify cs_prompt untuk tone berbeda
+"""
+
+cara kerja api:
+┌──────────────────────┐
+│  Incoming Request    │
+└──────────┬───────────┘
+           │
+    ┌──────▼──────────────┐
+    │ Semaphore Check     │
+    │ (max 3 concurrent)  │
+    └──────┬──────────────┘
+           │
+    ┌──────▼──────────────┐    Queue Full?
+    │ Wait if queue full  │─────────────→ Client waits
+    └──────┬──────────────┘
+           │ Slot available
+           │
+    ┌──────▼──────────────┐
+    │ Increment counter   │
+    │ active_requests++   │
+    └──────┬──────────────┘
+           │
+    ┌──────▼──────────────┐
+    │ Get Chatbot         │
+    │ (singleton)         │
+    └──────┬──────────────┘
+           │
+    ┌──────▼──────────────────┐
+    │ Run in executor         │
+    │ (avoid blocking event)  │
+    │ loop.run_in_executor()  │
+    └──────┬──────────────────┘
+           │
+    ┌──────▼──────────────┐
+    │ chatbot.answer()    │
+    │ - Context validate  │
+    │ - RAG retrieval     │
+    │ - LLM generate      │
+    │ - Calculate conf    │
+    │ - Log metrics       │
+    └──────┬──────────────┘
+           │
+    ┌──────▼──────────────┐
+    │ Format Response     │
+    │ - answer            │
+    │ - sources           │
+    │ - confidence        │
+    └──────┬──────────────┘
+           │
+    ┌──────▼──────────────┐
+    │ Decrement counter   │
+    │ active_requests--   │
+    └──────┬──────────────┘
+           │
+    ┌──────▼──────────────┐
+    │ Return JSON         │
+    └─────────────────────┘

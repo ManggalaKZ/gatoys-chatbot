@@ -1,0 +1,33 @@
+# ============================================================
+#  Dependencies GA Toys Chatbot (untuk deployment di server)
+# ============================================================
+#  PENTING: torch diinstall TERPISAH versi CPU sebelum file ini, dengan:
+#    pip install torch --index-url https://download.pytorch.org/whl/cpu
+#  (Tanpa --index-url, pip menarik torch versi CUDA yang besar & tak perlu di VPS.)
+# ============================================================
+
+# --- Server ---
+fastapi==0.119.0
+uvicorn[standard]==0.37.0
+python-multipart==0.0.20
+
+# --- RAG / LangChain ---
+langchain==0.3.27
+langchain-community==0.3.31
+langchain-core==0.3.79
+langchain-google-genai==2.0.10
+langchain-text-splitters==0.3.11
+
+# --- Embedding & Vector Search ---
+sentence-transformers==5.1.1
+transformers==4.57.1
+tokenizers==0.22.1
+huggingface-hub==0.35.3
+faiss-cpu==1.12.0
+numpy==2.2.6
+scikit-learn==1.7.2
+
+# --- Database & Integrasi ---
+supabase==2.22.0
+redis==6.4.0
+python-dotenv==1.1.1

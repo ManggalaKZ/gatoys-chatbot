@@ -1,0 +1,46 @@
+├── CONFIGURATION 
+│   ├── Environment Variables (.env)
+│   ├── API Keys (Gemini + Supabase)
+│   ├── Model Settings (paraphrase-multilingual-MiniLM-L12-v2, Temperature, etc.)
+│   └── Feature Flags (Metrics, Refresh, Display)
+│
+├── CUSTOM CLASSES 
+│   ├── sentenceTransformers - Wrapper untuk BGE-M3 model
+│   │   ├── embed_documents() - Batch embedding
+│   │   ├── embed_query() - Single query embedding
+│   │   └── __call__() - Callable interface
+│   │
+│   └── MetricsTracker - Performance tracking untuk skripsi
+│       ├── log_query() - Log setiap query
+│       ├── save_metrics() - Save to JSON
+│       └── get_summary() - Format report
+│
+├── DATA LAYER
+│   ├── load_products_from_db() - Supabase query dengan join
+│   ├── build_product_documents() - Transform data → natural language
+│   └── build_store_info_documents() - Static info (6 docs)
+│
+├── VECTOR STORE LAYER
+│   └── FAISSIndexBuilder Class
+│       ├── _init_embeddings() - Initialize SentenceTransformers
+│       ├── build_from_documents() - Create FAISS index
+│       ├── save_index() - Persist to disk
+│       ├── load_index() - Load from disk
+│       └── needs_refresh() - Check refresh interval
+│
+├── QUERY PROCESSING 
+│   ├── classify_query() - Classify ke 6 types
+│   └── calculate_confidence() - 5-factor confidence score
+│
+├── MAIN CHATBOT 
+│   └── ToysShopChatbot Class
+│       ├── initialize() - 4-step initialization
+│       ├── create_qa_chain() - RetrievalQA setup
+│       ├── refresh_index_if_needed() - Auto-refresh logic
+│       ├── answer_question() - Main query processor
+│       └── run_interactive() - Chat loop
+│
+└── UTILITIES (Line 951-1100)
+    ├── test_chatbot_scenarios() - Automated testing
+    ├── export_metrics() - Report generator
+    └── main() - Entry point

@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments (JANGAN di-push — dibuat ulang di server)
+.venv/
+venv/
+venv_fix/
+env/
+
+# Secrets (WAJIB diabaikan)
+.env
+
+# Index FAISS (dibangun ulang dari Supabase di server)
+faiss_index/
+
+# Output / data lokal
+chatbot_metrics.json
+result_response_data.json
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
