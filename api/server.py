@@ -234,6 +234,8 @@ async def chat(request: QueryRequest, background_tasks: BackgroundTasks):
                 if doc.metadata.get('type') == 'product':
                     source_info.product_name = doc.metadata.get('name', 'N/A')
                     source_info.price = doc.metadata.get('price', 0)
+                    source_info.image = doc.metadata.get('image')
+                    source_info.product_id = doc.metadata.get('product_id')
                 else:
                     source_info.title = doc.metadata.get('title', 'Store Info')
                 

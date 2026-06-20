@@ -97,7 +97,9 @@ def load_products_from_db() -> List[Dict]:
                 series,
                 origin,
                 extra_info,
-                categories!inner(name)
+                slug,
+                categories!inner(name),
+                product_images(path)
             """) \
             .eq('is_active', True) \
             .order('id') \
@@ -112,6 +114,8 @@ def load_products_from_db() -> List[Dict]:
             product = {
                 'product_id': item['id'],
                 'name': item['title'],
+                'slug': item.get('slug', ''),
+                'image': (item['product_images'][0]['path'] if item.get('product_images') else None),
                 'sku': item.get('sku', ''),
                 'price': item['price'],
                 'stock': item.get('stock', 0),
@@ -256,6 +260,8 @@ def build_product_documents(products: List[Dict]) -> List[Document]:
             "name": product['name'],
             "sku": product['sku'],
             "price": product['price'],
+            "image": product.get('image'),
+            "slug": product.get('slug', ''),
             "stock": stock if stock is not None else 0,
             "probability": prob,
             "category": product['category_name'],

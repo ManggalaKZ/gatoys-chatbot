@@ -45,6 +45,8 @@ class SourceInfo(BaseModel):
     type: str = Field(..., description="Type: 'product' or other")
     product_name: Optional[str] = Field(None, description="Product name if type=product")
     price: Optional[float] = Field(None, description="Product price if type=product")
+    image: Optional[str] = Field(None, description="Product image filename (from product_images)")
+    product_id: Optional[int] = Field(None, description="Product ID for linking to detail page")
     title: Optional[str] = Field(None, description="Title if not product")
 
 
